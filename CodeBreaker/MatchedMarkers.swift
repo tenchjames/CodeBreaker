@@ -14,8 +14,17 @@ enum Match {
 }
 
 struct MatchedMarkers: View {
-    var matches: [Match]
+    // MARK: Data In
+    let matches: [Match]
+    
+    // MARK: - Body
     var body: some View {
+//        let columns = [GridItem(.fixed(30)), GridItem(.fixed(30))]
+//        LazyVGrid(columns: columns) {
+//            ForEach(matches.indices, id: \.self) { index in
+//                matchMarker(peg: index)
+//            }
+//        }
         HStack {
             VStack {
                 matchMarker(peg: 0)
@@ -24,7 +33,6 @@ struct MatchedMarkers: View {
             VStack {
                 matchMarker(peg: 2)
                 matchMarker(peg: 3)
-                
             }
         }
     }
@@ -42,5 +50,25 @@ struct MatchedMarkers: View {
 
 
 #Preview {
-    MatchedMarkers(matches: [.exact, .inexact, .nomatch, .exact])
+    let code = Code(kind: .guess, pegs: [.red, .blue, .green, .yellow])
+    HStack {
+        ForEach(code.pegs.indices, id: \.self) { index in
+            RoundedRectangle(cornerRadius: 10)
+                .overlay {
+                    if code.pegs[index] == Code.missingPeg {
+                        RoundedRectangle(cornerRadius: 10)
+                            .strokeBorder(Color.gray)
+                    }
+                }
+                .contentShape(Rectangle())
+                .aspectRatio(1, contentMode: .fit)
+                .foregroundStyle(code.pegs[index])
+        }
+
+        MatchedMarkers(matches: [.exact, .inexact, ])
+    }
 }
+
+
+
+// MatchedMarkers(matches: [.exact, .inexact, .nomatch, .exact])
