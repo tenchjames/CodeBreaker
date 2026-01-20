@@ -26,7 +26,6 @@ struct CodeBreaker {
     init(pegChoices: [Peg] = [.red, .green, .blue, .yellow]) {
         self.pegChoices = pegChoices
         masterCode.randomize(from: pegChoices)
-        print(masterCode)
     }
     
     
@@ -54,7 +53,13 @@ struct CodeBreaker {
         } else {
             guess.pegs[index] = pegChoices.first ?? Code.missingPeg
         }
-        
+    }
+    
+    mutating func restart() {
+        masterCode.randomize(from: pegChoices)
+        attempts.removeAll()
+        guess.reset()
+        masterCode.kind = .master(isHidden: true)
     }
 }
 
